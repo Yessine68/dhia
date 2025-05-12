@@ -157,20 +157,24 @@ GameState run_highscore(int current_score) {
     
     // State variables
     bool running = true;
-    bool entering_name = true;
+    bool entering_name = false; // Start with showing scores by default
     bool new_high_score = false;
     GameState next_state = STATE_MENU;
     
-    // Check if current score is a high score
-    for (int i = 0; i < num_scores; i++) {
-        if (current_score > scores[i].score) {
-            new_high_score = true;
-            break;
+    // Only check for high score if current_score > 0 (meaning came from gameplay)
+    if (current_score > 0) {
+        for (int i = 0; i < num_scores; i++) {
+            if (current_score > scores[i].score) {
+                new_high_score = true;
+                entering_name = true; // Only enter name if it's a high score
+                break;
+            }
         }
-    }
-    
-    if (!new_high_score && num_scores < MAX_SCORES) {
-        new_high_score = true;
+        
+        if (!new_high_score && num_scores < MAX_SCORES) {
+            new_high_score = true;
+            entering_name = true; // Only enter name if it's a high score
+        }
     }
     
     // Text input variables
@@ -217,9 +221,11 @@ GameState run_highscore(int current_score) {
             display_button(screen, back_button);
             display_button(screen, quit_button);
             
-            // Display current score
-            sprintf(score_text, "Your Score: %d", current_score);
-            display_text(screen, font, score_text, 750, 280, white);
+            // Display current score only if it's greater than 0
+            if (current_score > 0) {
+                sprintf(score_text, "Your Score: %d", current_score);
+                display_text(screen, font, score_text, 750, 280, white);
+            }
         }
         
         // Update display
@@ -250,6 +256,7 @@ GameState run_highscore(int current_score) {
                             if (is_point_in_button(mouse_x, mouse_y, back_button)) {
                                 // Return to menu
                                 running = false;
+                                next_state = STATE_MENU;
                                 if (click_sound) Mix_PlayChannel(-1, click_sound, 0);
                             } else if (is_point_in_button(mouse_x, mouse_y, quit_button)) {
                                 // Exit game
@@ -283,6 +290,7 @@ GameState run_highscore(int current_score) {
                         }
                     } else if (event.key.keysym.sym == SDLK_ESCAPE) {
                         running = false;
+                        next_state = STATE_MENU;
                     }
                     break;
             }

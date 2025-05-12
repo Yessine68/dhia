@@ -61,6 +61,12 @@ GameState run_menu() {
                             nextState = STATE_GAME;
                             Mix_HaltMusic(); // Stop menu music before starting game
                         }
+                        // Check if score button (index 2) was clicked - ADDED THIS SECTION
+                        else if (hoveredIndex == 2) {
+                            quit = 1;
+                            nextState = STATE_HIGHSCORE;
+                            Mix_HaltMusic(); // Stop menu music before showing scores
+                        }
                         // Exit button
                         else if (hoveredIndex == 4) {
                             quit = 1;
