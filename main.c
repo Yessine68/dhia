@@ -22,37 +22,61 @@ int main() {
     }
 
     GameState currentState = STATE_MENU;
-    
-    printf("Starting with state: %d\n", currentState);
+    int current_score = 0;
     
     while (currentState != STATE_EXIT) {
         switch (currentState) {
             case STATE_MENU:
-                printf("Entering MENU state\n");
                 currentState = run_menu();
-                printf("Exited MENU state, next state: %d\n", currentState);
                 break;
                 
             case STATE_GAME:
-                printf("Entering GAME state\n");
                 currentState = run_game();
-                printf("Exited GAME state, next state: %d\n", currentState);
+                if (currentState == STATE_PUZZLE) {
+                    // Pass current score to next level
+                    // We might want to calculate this score based on game performance
+                    current_score = 100;
+                }
+                break;
+                
+            case STATE_PUZZLE:
+                currentState = run_puzzle();
+                if (currentState == STATE_LEVEL2) {
+                    // Add score for completing puzzle
+                    current_score += 200;
+                }
                 break;
                 
             case STATE_LEVEL2:
-                printf("Entering LEVEL2 state\n");
                 currentState = run_level2();
-                printf("Exited LEVEL2 state, next state: %d\n", currentState);
+                if (currentState == STATE_LEVEL3) {
+                    // Add score for completing level 2
+                    current_score += 300;
+                }
+                break;
+                
+            case STATE_LEVEL3:
+                currentState = run_level3();
+                if (currentState == STATE_HIGHSCORE) {
+                    // Add score for completing level 3
+                    current_score += 400;
+                }
+                break;
+                
+            case STATE_HIGHSCORE:
+                currentState = run_highscore(current_score);
+                // Reset score if returning to menu
+                if (currentState == STATE_MENU) {
+                    current_score = 0;
+                }
                 break;
                 
             default:
-                printf("Entering default case, exiting\n");
                 currentState = STATE_EXIT;
                 break;
         }
     }
 
-    printf("Cleaning up and exiting\n");
     TTF_Quit();
     Mix_CloseAudio();
     SDL_Quit();

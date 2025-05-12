@@ -1,13 +1,13 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -g -Wno-switch
-LDFLAGS = -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer
+CFLAGS = -Wall -g -Wno-switch -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT
+LDFLAGS = -lSDL -lSDL_image -lSDL_ttf -lSDL_mixer -lSDL_gfx -lm
 
 # Source files
 MENU_SRC = fonction_p.c
 GAME_SRC = perso.c
 LEVEL2_SRC = joueur.c enemie.c
-INTEGRATED_SRC = main.c menu.c game.c level2.c
+INTEGRATED_SRC = main.c menu.c game.c puzzle.c level2.c level3.c score.c
 
 # Object files
 MENU_OBJ = $(MENU_SRC:.c=.o)
@@ -36,11 +36,15 @@ $(EXEC): $(ALL_OBJ)
 main.o: main.c integrated.h
 menu.o: menu.c integrated.h fonction_p.h
 game.o: game.c integrated.h perso.h
+puzzle.o: puzzle.c integrated.h
 level2.o: level2.c integrated.h joueur.h enemie.h
+level3.o: level3.c integrated.h joueur.h enemie.h
 joueur.o: joueur.c joueur.h
 enemie.o: enemie.c enemie.h
 fonction_p.o: fonction_p.c fonction_p.h
 perso.o: perso.c perso.h
+score.o: score.c integrated.h
+
 
 # Clean target (remove object files)
 clean:

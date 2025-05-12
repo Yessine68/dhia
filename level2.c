@@ -103,6 +103,12 @@ GameState run_level2() {
 
         afficherJoueur(j, screen);
         afficherEnnemi(e, screen);
+        
+        if (j.pos.x >= screen->w - 100) {
+            printf("Character reached end of level 2, transitioning to level 3 (final boss)\n");
+            running = 0;
+            nextState = STATE_LEVEL3;
+        }
 
         if (j.health <= 0 && gameOverText) {
             SDL_Rect pos = {screen->w / 2 - gameOverText->w / 2, screen->h / 2 - gameOverText->h / 2};

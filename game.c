@@ -249,19 +249,16 @@ GameState run_game() {
         if (!p2.is_attacking && was_moving2) {
             p2.move = 1;
         }
-
+        if (p1.position.x >= SCREEN_W - 100) {
+         printf("Character reached edge, transitioning to puzzle game\n");
+        boucle = 0;
+        nextState = STATE_PUZZLE;  // Changed from STATE_LEVEL2 to STATE_PUZZLE
+        }
         saut(&p1, &jump1, &jump_speed1);
         saut(&p2, &jump2, &jump_speed2);
         SDL_Delay(5);
         deplacerPerso(&p1);
         deplacerPerso(&p2);
-
-        // Add this check after deplacerPerso calls
-        if (p1.position.x >= SCREEN_W - 100) {
-            printf("Character reached edge, transitioning to level 2\n"); // Debug message
-            boucle = 0;
-            nextState = STATE_LEVEL2;
-        }
 
         renderHealth(screen, hearts3, hearts2, hearts1, hearts0, p1.healthpoints, &heartPosition);
         SDL_Flip(screen);
