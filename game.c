@@ -255,6 +255,14 @@ GameState run_game() {
         SDL_Delay(5);
         deplacerPerso(&p1);
         deplacerPerso(&p2);
+
+        // Add this check after deplacerPerso calls
+        if (p1.position.x >= SCREEN_W - 100) {
+            printf("Character reached edge, transitioning to level 2\n"); // Debug message
+            boucle = 0;
+            nextState = STATE_LEVEL2;
+        }
+
         renderHealth(screen, hearts3, hearts2, hearts1, hearts0, p1.healthpoints, &heartPosition);
         SDL_Flip(screen);
     }

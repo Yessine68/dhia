@@ -23,22 +23,36 @@ int main() {
 
     GameState currentState = STATE_MENU;
     
+    printf("Starting with state: %d\n", currentState);
+    
     while (currentState != STATE_EXIT) {
         switch (currentState) {
             case STATE_MENU:
+                printf("Entering MENU state\n");
                 currentState = run_menu();
+                printf("Exited MENU state, next state: %d\n", currentState);
                 break;
                 
             case STATE_GAME:
+                printf("Entering GAME state\n");
                 currentState = run_game();
+                printf("Exited GAME state, next state: %d\n", currentState);
+                break;
+                
+            case STATE_LEVEL2:
+                printf("Entering LEVEL2 state\n");
+                currentState = run_level2();
+                printf("Exited LEVEL2 state, next state: %d\n", currentState);
                 break;
                 
             default:
+                printf("Entering default case, exiting\n");
                 currentState = STATE_EXIT;
                 break;
         }
     }
 
+    printf("Cleaning up and exiting\n");
     TTF_Quit();
     Mix_CloseAudio();
     SDL_Quit();
